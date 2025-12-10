@@ -18,7 +18,7 @@ pool.on('connect', () => {
 
 pool.on('error', (err) => {
   console.error('❌ Lỗi kết nối database:', err);
-  process.exit(-1);
+  // Log error but don't exit immediately - let the application handle it gracefully
 });
 
 module.exports = pool;

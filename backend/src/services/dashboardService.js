@@ -78,9 +78,14 @@ class DashboardService {
     const client = await pool.connect();
     
     try {
+      // Validate and sanitize inputs
+      const validPeriods = ['day', 'week', 'month'];
+      const safePeriod = validPeriods.includes(period) ? period : 'day';
+      const safeDays = Math.min(Math.max(parseInt(days) || 30, 1), 365); // Limit to 1-365 days
+      
       let groupFormat, dateFormat;
       
-      switch(period) {
+      switch(safePeriod) {
         case 'week':
           groupFormat = "DATE_TRUNC('week', created_at)";
           dateFormat = 'YYYY-"W"IW';
@@ -101,10 +106,10 @@ class DashboardService {
            COUNT(*) as orders
          FROM orders
          WHERE status = 'completed'
-         AND created_at >= NOW() - INTERVAL '${days} days'
+         AND created_at >= NOW() - INTERVAL '1 day' * $2
          GROUP BY ${groupFormat}
          ORDER BY ${groupFormat}`,
-        [dateFormat]
+        [dateFormat, safeDays]
       );
       
       return result.rows.map(row => ({
