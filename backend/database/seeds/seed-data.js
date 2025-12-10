@@ -136,7 +136,7 @@ async function seedDatabase() {
     for (const category of categoryIds) {
       const products = productNames[category.name] || [];
       for (const productName of products) {
-        const price = getRandomInt(100, 5000) * 10000; // 1-50 triệu VNĐ
+        const price = getRandomInt(100, 5000) * 1000; // 100k-5tr VNĐ
         const stock = getRandomInt(0, 200);
         
         const result = await client.query(
@@ -152,7 +152,7 @@ async function seedDatabase() {
       const category = getRandomElement(categoryIds);
       const baseProduct = getRandomElement(productNames[category.name]);
       const productName = `${baseProduct} ${getRandomElement(['Plus', 'Pro', 'Max', 'Ultra', 'Special Edition'])}`;
-      const price = getRandomInt(100, 5000) * 10000;
+      const price = getRandomInt(100, 5000) * 1000;
       const stock = getRandomInt(0, 200);
       
       const result = await client.query(
